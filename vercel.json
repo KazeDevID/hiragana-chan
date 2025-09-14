@@ -9,5 +9,4 @@
       "src": "/(.*)",
       "dest": "/api/index.js"
     }
-  ]
 }
