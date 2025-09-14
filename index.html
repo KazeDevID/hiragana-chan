@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Belajar Hiragana Jepang</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <header class="header">
+        <div class="container">
+            <h1 class="title">ひらがな学習 - Belajar Hiragana</h1>
+            <nav class="nav">
+                <button class="nav-btn active" data-section="chart">Tabel Hiragana</button>
+                <button class="nav-btn" data-section="practice">Latihan Menulis</button>
+                <button class="nav-btn" data-section="vocabulary">Kosakata</button>
+                <button class="nav-btn" data-section="quiz">Quiz</button>
+            </nav>
+        </div>
+    </header>
+
+    <main class="main">
+        <div class="container">
+            <!-- Progress Bar -->
+            <div class="progress-container">
+                <div class="progress-bar">
+                    <div class="progress-fill" id="progressFill"></div>
+                </div>
+                <span class="progress-text" id="progressText">Progress: 0/46</span>
+            </div>
+
+            <!-- Hiragana Chart Section -->
+            <section class="section active" id="chart">
+                <h2 class="section-title">Tabel Hiragana Lengkap</h2>
+                <div class="hiragana-grid" id="hiraganaGrid">
+                    <!-- Grid akan diisi oleh JavaScript -->
+                </div>
+            </section>
+
+            <!-- Writing Practice Section -->
+            <section class="section" id="practice">
+                <h2 class="section-title">Latihan Menulis</h2>
+                <div class="practice-container">
+                    <div class="character-display">
+                        <div class="current-character" id="currentCharacter">あ</div>
+                        <div class="character-info">
+                            <span class="romaji" id="currentRomaji">a</span>
+                            <span class="meaning" id="currentMeaning"></span>
+                        </div>
+                    </div>
+                    <div class="stroke-order" id="strokeOrder">
+                        <h3>Urutan Goresan:</h3>
+                        <div class="stroke-steps" id="strokeSteps">
+                            <!-- Akan diisi oleh JavaScript -->
+                        </div>
+                    </div>
+                    <div class="practice-controls">
+                        <button class="btn btn-primary" id="prevChar">← Sebelumnya</button>
+                        <button class="btn btn-success" id="markLearned">Sudah Dipelajari ✓</button>
+                        <button class="btn btn-primary" id="nextChar">Selanjutnya →</button>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Vocabulary Section -->
+            <section class="section" id="vocabulary">
+                <h2 class="section-title">Kosakata Hiragana</h2>
+                <div class="vocabulary-container">
+                    <div class="vocabulary-grid" id="vocabularyGrid">
+                        <!-- Akan diisi oleh JavaScript -->
+                    </div>
+                </div>
+            </section>
+
+            <!-- Quiz Section -->
+            <section class="section" id="quiz">
+                <h2 class="section-title">Quiz Hiragana</h2>
+                <div class="quiz-container">
+                    <div class="quiz-type-selector">
+                        <button class="btn btn-outline active" data-quiz="hiragana-romaji">Hiragana → Romaji</button>
+                        <button class="btn btn-outline" data-quiz="romaji-hiragana">Romaji → Hiragana</button>
+                        <button class="btn btn-outline" data-quiz="vocabulary">Kosakata</button>
+                    </div>
+                    <div class="quiz-content" id="quizContent">
+                        <div class="quiz-question" id="quizQuestion">
+                            <div class="question-character">あ</div>
+                            <div class="question-text">Bagaimana cara membaca hiragana ini?</div>
+                        </div>
+                        <div class="quiz-options" id="quizOptions">
+                            <!-- Akan diisi oleh JavaScript -->
+                        </div>
+                        <div class="quiz-result" id="quizResult"></div>
+                    </div>
+                    <div class="quiz-stats">
+                        <div class="stat">
+                            <span class="stat-label">Benar:</span>
+                            <span class="stat-value" id="correctCount">0</span>
+                        </div>
+                        <div class="stat">
+                            <span class="stat-label">Salah:</span>
+                            <span class="stat-value" id="incorrectCount">0</span>
+                        </div>
+                        <div class="stat">
+                            <span class="stat-label">Akurasi:</span>
+                            <span class="stat-value" id="accuracy">0%</span>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </div>
+    </main>
+
+    <footer class="footer">
+        <div class="container">
+            <p>&copy; 2025 Belajar Hiragana Jepang. Dibuat Michael Argiam.</p>
+        </div>
+    </footer>
+
+    <!-- Character Detail Modal -->
+    <div class="modal" id="characterModal">
+        <div class="modal-content">
+            <span class="close" id="closeModal">&times;</span>
+            <div class="modal-character" id="modalCharacter">あ</div>
+            <div class="modal-info">
+                <h3 id="modalRomaji">a</h3>
+                <p class="modal-description" id="modalDescription"></p>
+                <div class="modal-examples" id="modalExamples">
+                    <!-- Contoh kata akan ditampilkan di sini -->
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="hiragana-data.js"></script>
+    <script src="script.js"></script>
+</body>
+</html>
