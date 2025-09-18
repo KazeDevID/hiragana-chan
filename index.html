@@ -12,6 +12,9 @@
             <h1 class="title">ひらがな学習 - Belajar Hiragana</h1>
             <nav class="nav">
                 <button class="nav-btn active" data-section="chart">Tabel Hiragana</button>
+                <button class="nav-btn" data-section="dakuten">Dakuten (゛)</button>
+                <button class="nav-btn" data-section="handakuten">Handakuten (゜)</button>
+                <button class="nav-btn" data-section="combinations">Kombinasi</button>
                 <button class="nav-btn" data-section="practice">Latihan Menulis</button>
                 <button class="nav-btn" data-section="vocabulary">Kosakata</button>
                 <button class="nav-btn" data-section="quiz">Quiz</button>
@@ -26,20 +29,74 @@
                 <div class="progress-bar">
                     <div class="progress-fill" id="progressFill"></div>
                 </div>
-                <span class="progress-text" id="progressText">Progress: 0/46</span>
+                <span class="progress-text" id="progressText">Progress: 0/104</span>
             </div>
 
             <!-- Hiragana Chart Section -->
             <section class="section active" id="chart">
                 <h2 class="section-title">Tabel Hiragana Lengkap</h2>
+                <div class="chart-description">
+                    <p>46 karakter hiragana dasar yang merupakan fondasi bahasa Jepang</p>
+                </div>
                 <div class="hiragana-grid" id="hiraganaGrid">
                     <!-- Grid akan diisi oleh JavaScript -->
+                </div>
+            </section>
+
+            <!-- Dakuten Section -->
+            <section class="section" id="dakuten">
+                <h2 class="section-title">Dakuten (゛) - Suara Bersuara</h2>
+                <div class="chart-description">
+                    <p>Dakuten (゛) mengubah konsonan tak bersuara menjadi bersuara. Contoh: か (ka) → が (ga)</p>
+                </div>
+                <div class="hiragana-grid" id="dakutenGrid">
+                    <!-- Grid akan diisi oleh JavaScript -->
+                </div>
+            </section>
+
+            <!-- Handakuten Section -->
+            <section class="section" id="handakuten">
+                <h2 class="section-title">Handakuten (゜) - Suara Semi-bersuara</h2>
+                <div class="chart-description">
+                    <p>Handakuten (゜) hanya digunakan pada baris H untuk membuat suara P. Contoh: は (ha) → ぱ (pa)</p>
+                </div>
+                <div class="hiragana-grid" id="handakutenGrid">
+                    <!-- Grid akan diisi oleh JavaScript -->
+                </div>
+            </section>
+
+            <!-- Combinations Section -->
+            <section class="section" id="combinations">
+                <h2 class="section-title">Kombinasi (ya, yu, yo)</h2>
+                <div class="chart-description">
+                    <p>Kombinasi karakter dengan や, ゆ, よ kecil untuk membuat suara gabungan</p>
+                </div>
+                <div class="combination-categories">
+                    <div class="category">
+                        <h3>Kombinasi Dasar</h3>
+                        <div class="hiragana-grid" id="basicCombinationsGrid"></div>
+                    </div>
+                    <div class="category">
+                        <h3>Kombinasi Dakuten</h3>
+                        <div class="hiragana-grid" id="dakutenCombinationsGrid"></div>
+                    </div>
+                    <div class="category">
+                        <h3>Kombinasi Handakuten</h3>
+                        <div class="hiragana-grid" id="handakutenCombinationsGrid"></div>
+                    </div>
                 </div>
             </section>
 
             <!-- Writing Practice Section -->
             <section class="section" id="practice">
                 <h2 class="section-title">Latihan Menulis</h2>
+                <div class="practice-type-selector">
+                    <button class="btn btn-outline active" data-practice="basic">Hiragana Dasar</button>
+                    <button class="btn btn-outline" data-practice="dakuten">Dakuten</button>
+                    <button class="btn btn-outline" data-practice="handakuten">Handakuten</button>
+                    <button class="btn btn-outline" data-practice="combinations">Kombinasi</button>
+                    <button class="btn btn-outline" data-practice="all">Semua</button>
+                </div>
                 <div class="practice-container">
                     <div class="character-display">
                         <div class="current-character" id="currentCharacter">あ</div>
@@ -58,6 +115,10 @@
                         <button class="btn btn-primary" id="prevChar">← Sebelumnya</button>
                         <button class="btn btn-success" id="markLearned">Sudah Dipelajari ✓</button>
                         <button class="btn btn-primary" id="nextChar">Selanjutnya →</button>
+                    </div>
+                    <div class="practice-info">
+                        <span id="practiceProgress">1 / 46</span>
+                        <span id="practiceType">Hiragana Dasar</span>
                     </div>
                 </div>
             </section>
@@ -79,6 +140,8 @@
                     <div class="quiz-type-selector">
                         <button class="btn btn-outline active" data-quiz="hiragana-romaji">Hiragana → Romaji</button>
                         <button class="btn btn-outline" data-quiz="romaji-hiragana">Romaji → Hiragana</button>
+                        <button class="btn btn-outline" data-quiz="dakuten">Quiz Dakuten</button>
+                        <button class="btn btn-outline" data-quiz="combinations">Quiz Kombinasi</button>
                         <button class="btn btn-outline" data-quiz="vocabulary">Kosakata</button>
                     </div>
                     <div class="quiz-content" id="quizContent">
