@@ -18,6 +18,9 @@
                 <button class="nav-btn" data-section="practice">Latihan Menulis</button>
                 <button class="nav-btn" data-section="vocabulary">Kosakata</button>
                 <button class="nav-btn" data-section="quiz">Quiz</button>
+                <button class="nav-btn" data-section="games">Mini Games</button>
+                <button class="nav-btn" data-section="flashcards">Flashcards</button>
+                <button class="nav-btn" data-section="statistics">Statistik</button>
             </nav>
         </div>
     </header>
@@ -166,6 +169,179 @@
                         <div class="stat">
                             <span class="stat-label">Akurasi:</span>
                             <span class="stat-value" id="accuracy">0%</span>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Mini Games Section -->
+            <section class="section" id="games">
+                <h2 class="section-title">Mini Games</h2>
+                <div class="games-container">
+                    <div class="game-card" id="memoryGame">
+                        <h3>Memory Match</h3>
+                        <p>Cocokkan hiragana dengan romaji-nya</p>
+                        <button class="btn btn-primary" onclick="startMemoryGame()">Mulai Game</button>
+                        <div class="memory-grid" id="memoryGrid" style="display: none;"></div>
+                        <div class="game-stats" id="memoryStats" style="display: none;">
+                            <span>Waktu: <span id="memoryTime">0</span>s</span>
+                            <span>Gerakan: <span id="memoryMoves">0</span></span>
+                        </div>
+                    </div>
+                    
+                    <div class="game-card" id="typingGame">
+                        <h3>Speed Typing</h3>
+                        <p>Ketik romaji dari hiragana yang ditampilkan</p>
+                        <button class="btn btn-primary" onclick="startTypingGame()">Mulai Game</button>
+                        <div class="typing-game" id="typingGameArea" style="display: none;">
+                            <div class="typing-character" id="typingCharacter">あ</div>
+                            <input type="text" id="typingInput" placeholder="Ketik romaji...">
+                            <div class="typing-stats">
+                                <span>Skor: <span id="typingScore">0</span></span>
+                                <span>Waktu: <span id="typingTime">60</span>s</span>
+                                <span>WPM: <span id="typingWPM">0</span></span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="game-card" id="drawingGame">
+                        <h3>Drawing Practice</h3>
+                        <p>Latih menulis hiragana dengan jari atau mouse</p>
+                        <button class="btn btn-primary" onclick="startDrawingGame()">Mulai Game</button>
+                        <div class="drawing-game" id="drawingGameArea" style="display: none;">
+                            <div class="drawing-character" id="drawingCharacter">あ</div>
+                            <canvas id="drawingCanvas" width="300" height="300"></canvas>
+                            <div class="drawing-controls">
+                                <button class="btn btn-outline" onclick="clearCanvas()">Hapus</button>
+                                <button class="btn btn-success" onclick="nextDrawingCharacter()">Selanjutnya</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Flashcards Section -->
+            <section class="section" id="flashcards">
+                <h2 class="section-title">Flashcards</h2>
+                <div class="flashcard-container">
+                    <div class="flashcard-controls">
+                        <button class="btn btn-outline active" data-flashcard="basic">Hiragana Dasar</button>
+                        <button class="btn btn-outline" data-flashcard="dakuten">Dakuten</button>
+                        <button class="btn btn-outline" data-flashcard="combinations">Kombinasi</button>
+                        <button class="btn btn-outline" data-flashcard="vocabulary">Kosakata</button>
+                    </div>
+                    
+                    <div class="flashcard" id="flashcard">
+                        <div class="flashcard-inner">
+                            <div class="flashcard-front">
+                                <div class="flashcard-character" id="flashcardCharacter">あ</div>
+                            </div>
+                            <div class="flashcard-back">
+                                <div class="flashcard-romaji" id="flashcardRomaji">a</div>
+                                <div class="flashcard-meaning" id="flashcardMeaning">Suara vokal "a"</div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="flashcard-navigation">
+                        <button class="btn btn-primary" id="prevFlashcard">← Sebelumnya</button>
+                        <button class="btn btn-outline" id="flipFlashcard">Balik Kartu</button>
+                        <button class="btn btn-primary" id="nextFlashcard">Selanjutnya →</button>
+                    </div>
+                    
+                    <div class="flashcard-progress">
+                        <span id="flashcardProgress">1 / 46</span>
+                        <div class="difficulty-buttons">
+                            <button class="btn btn-error" onclick="markDifficult()">Sulit</button>
+                            <button class="btn btn-warning" onclick="markMedium()">Sedang</button>
+                            <button class="btn btn-success" onclick="markEasy()">Mudah</button>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Statistics Section -->
+            <section class="section" id="statistics">
+                <h2 class="section-title">Statistik Pembelajaran</h2>
+                <div class="stats-container">
+                    <div class="stats-overview">
+                        <div class="stat-card">
+                            <h3>Progress Keseluruhan</h3>
+                            <div class="circular-progress" id="overallProgress">
+                                <div class="progress-value" id="overallProgressValue">0%</div>
+                            </div>
+                        </div>
+                        
+                        <div class="stat-card">
+                            <h3>Waktu Belajar</h3>
+                            <div class="time-stats">
+                                <div class="time-stat">
+                                    <span class="time-label">Hari ini:</span>
+                                    <span class="time-value" id="todayTime">0 menit</span>
+                                </div>
+                                <div class="time-stat">
+                                    <span class="time-label">Total:</span>
+                                    <span class="time-value" id="totalTime">0 menit</span>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="stat-card">
+                            <h3>Streak Harian</h3>
+                            <div class="streak-display">
+                                <span class="streak-number" id="streakNumber">0</span>
+                                <span class="streak-label">hari berturut-turut</span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="stats-details">
+                        <div class="category-stats">
+                            <h3>Progress per Kategori</h3>
+                            <div class="category-progress">
+                                <div class="category-item">
+                                    <span>Hiragana Dasar</span>
+                                    <div class="progress-bar-small">
+                                        <div class="progress-fill-small" id="basicProgress"></div>
+                                    </div>
+                                    <span id="basicCount">0/46</span>
+                                </div>
+                                <div class="category-item">
+                                    <span>Dakuten</span>
+                                    <div class="progress-bar-small">
+                                        <div class="progress-fill-small" id="dakutenProgress"></div>
+                                    </div>
+                                    <span id="dakutenCount">0/20</span>
+                                </div>
+                                <div class="category-item">
+                                    <span>Handakuten</span>
+                                    <div class="progress-bar-small">
+                                        <div class="progress-fill-small" id="handakutenProgress"></div>
+                                    </div>
+                                    <span id="handakutenCount">0/5</span>
+                                </div>
+                                <div class="category-item">
+                                    <span>Kombinasi</span>
+                                    <div class="progress-bar-small">
+                                        <div class="progress-fill-small" id="combinationsProgress"></div>
+                                    </div>
+                                    <span id="combinationsCount">0/33</span>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="quiz-history">
+                            <h3>Riwayat Quiz</h3>
+                            <div class="quiz-chart" id="quizChart">
+                                <!-- Chart akan diisi oleh JavaScript -->
+                            </div>
+                        </div>
+                        
+                        <div class="achievements">
+                            <h3>Pencapaian</h3>
+                            <div class="achievement-grid" id="achievementGrid">
+                                <!-- Achievements akan diisi oleh JavaScript -->
+                            </div>
                         </div>
                     </div>
                 </div>
