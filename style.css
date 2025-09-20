@@ -719,6 +719,33 @@ body {
     z-index: 1;
 }
 
+.quiz-typing {
+    display: flex;
+    gap: 1rem;
+    justify-content: center;
+    align-items: center;
+    margin-bottom: 3rem;
+    position: relative;
+    z-index: 1;
+}
+
+.quiz-typing input {
+    background: var(--bg-secondary);
+    border: 2px solid var(--border-color);
+    padding: 1rem 1.5rem;
+    border-radius: var(--radius);
+    color: var(--text-primary);
+    font-size: 1.2rem;
+    min-width: 300px;
+    transition: var(--transition);
+}
+
+.quiz-typing input:focus {
+    border-color: var(--accent-color);
+    box-shadow: 0 0 0 3px rgba(69, 183, 209, 0.2);
+    outline: none;
+}
+
 .quiz-option {
     background: var(--bg-secondary);
     border: 2px solid var(--border-color);
@@ -1035,7 +1062,7 @@ body {
 /* Games Styles */
 .games-container {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+    grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
     gap: 2rem;
 }
 
@@ -1085,6 +1112,319 @@ body {
     margin-bottom: 2rem;
     position: relative;
     z-index: 1;
+}
+
+/* Memory Game */
+.memory-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 1rem;
+    margin-top: 2rem;
+}
+
+.memory-card {
+    aspect-ratio: 1;
+    perspective: 1000px;
+    cursor: pointer;
+}
+
+.memory-card-inner {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    text-align: center;
+    transition: transform 0.6s;
+    transform-style: preserve-3d;
+}
+
+.memory-card.flipped .memory-card-inner {
+    transform: rotateY(180deg);
+}
+
+.memory-card-front, .memory-card-back {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    backface-visibility: hidden;
+    background: var(--gradient-card);
+    border-radius: var(--radius);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.5rem;
+    font-weight: bold;
+    border: 2px solid var(--border-color);
+}
+
+.memory-card-back {
+    transform: rotateY(180deg);
+    background: var(--gradient-primary);
+    color: white;
+    font-family: var(--font-japanese);
+}
+
+.memory-card.matched {
+    opacity: 0.6;
+    pointer-events: none;
+}
+
+.game-stats {
+    display: flex;
+    justify-content: space-around;
+    margin-top: 2rem;
+    padding: 1rem;
+    background: var(--bg-secondary);
+    border-radius: var(--radius);
+    gap: 2rem;
+}
+
+/* Typing Game */
+.typing-game {
+    text-align: center;
+    padding: 2rem;
+}
+
+.typing-character {
+    font-size: 6rem;
+    font-family: var(--font-japanese);
+    background: var(--gradient-primary);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    margin-bottom: 2rem;
+    animation: typingFloat 2s ease-in-out infinite alternate;
+}
+
+@keyframes typingFloat {
+    0% { transform: translateY(0px); }
+    100% { transform: translateY(-10px); }
+}
+
+.typing-game input {
+    background: var(--bg-secondary);
+    border: 2px solid var(--border-color);
+    padding: 1rem 2rem;
+    border-radius: var(--radius);
+    color: var(--text-primary);
+    font-size: 1.5rem;
+    text-align: center;
+    margin-bottom: 2rem;
+    min-width: 300px;
+    transition: var(--transition);
+}
+
+.typing-game input:focus {
+    border-color: var(--accent-color);
+    box-shadow: 0 0 0 3px rgba(69, 183, 209, 0.2);
+    outline: none;
+}
+
+.typing-stats {
+    display: flex;
+    justify-content: space-around;
+    flex-wrap: wrap;
+    gap: 1rem;
+}
+
+/* Drawing Game */
+.drawing-game {
+    text-align: center;
+    padding: 2rem;
+}
+
+.drawing-character {
+    font-size: 4rem;
+    font-family: var(--font-japanese);
+    background: var(--gradient-primary);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    margin-bottom: 2rem;
+}
+
+#drawingCanvas {
+    border: 2px solid var(--border-color);
+    border-radius: var(--radius);
+    background: var(--bg-secondary);
+    cursor: crosshair;
+    margin-bottom: 2rem;
+}
+
+.drawing-controls {
+    display: flex;
+    justify-content: center;
+    gap: 1rem;
+}
+
+/* Falling Game */
+.falling-game {
+    text-align: center;
+    padding: 2rem;
+}
+
+#fallingCanvas {
+    border: 2px solid var(--border-color);
+    border-radius: var(--radius);
+    background: linear-gradient(180deg, var(--bg-secondary) 0%, var(--bg-tertiary) 100%);
+    margin-bottom: 1rem;
+}
+
+.falling-game input {
+    background: var(--bg-secondary);
+    border: 2px solid var(--border-color);
+    padding: 1rem 2rem;
+    border-radius: var(--radius);
+    color: var(--text-primary);
+    font-size: 1.2rem;
+    text-align: center;
+    margin-bottom: 2rem;
+    min-width: 300px;
+    transition: var(--transition);
+}
+
+.falling-game input:focus {
+    border-color: var(--primary-color);
+    box-shadow: 0 0 0 3px rgba(255, 107, 107, 0.2);
+    outline: none;
+}
+
+.falling-stats {
+    display: flex;
+    justify-content: space-around;
+    flex-wrap: wrap;
+    gap: 1rem;
+}
+
+/* Puzzle Game */
+.puzzle-game {
+    text-align: center;
+    padding: 2rem;
+}
+
+.puzzle-target {
+    font-size: 4rem;
+    font-family: var(--font-japanese);
+    background: var(--gradient-primary);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    margin-bottom: 2rem;
+}
+
+.puzzle-pieces {
+    display: flex;
+    justify-content: center;
+    gap: 1rem;
+    margin-bottom: 2rem;
+}
+
+.puzzle-piece {
+    width: 60px;
+    height: 60px;
+    background: var(--gradient-secondary);
+    border-radius: var(--radius);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: grab;
+    transition: var(--transition);
+}
+
+.puzzle-piece:hover {
+    transform: scale(1.1);
+}
+
+.puzzle-board {
+    width: 200px;
+    height: 200px;
+    border: 2px dashed var(--border-color);
+    border-radius: var(--radius);
+    margin: 0 auto 2rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.puzzle-controls {
+    display: flex;
+    justify-content: center;
+    gap: 1rem;
+}
+
+/* Rhythm Game */
+.rhythm-game {
+    text-align: center;
+    padding: 2rem;
+}
+
+.rhythm-track {
+    position: relative;
+    height: 150px;
+    background: var(--bg-secondary);
+    border-radius: var(--radius);
+    margin-bottom: 2rem;
+    overflow: hidden;
+}
+
+.rhythm-line {
+    position: absolute;
+    top: 50%;
+    left: 0;
+    right: 0;
+    height: 2px;
+    background: var(--accent-color);
+    transform: translateY(-50%);
+}
+
+.rhythm-notes {
+    position: relative;
+    height: 100%;
+    display: flex;
+    align-items: center;
+}
+
+.rhythm-note {
+    position: absolute;
+    font-size: 2rem;
+    font-family: var(--font-japanese);
+    color: var(--primary-color);
+    animation: rhythmMove 4s linear infinite;
+}
+
+@keyframes rhythmMove {
+    from { transform: translateX(600px); }
+    to { transform: translateX(-100px); }
+}
+
+.rhythm-note.active {
+    color: var(--success-color);
+    transform: scale(1.2);
+}
+
+.rhythm-input input {
+    background: var(--bg-secondary);
+    border: 2px solid var(--border-color);
+    padding: 1rem 2rem;
+    border-radius: var(--radius);
+    color: var(--text-primary);
+    font-size: 1.2rem;
+    text-align: center;
+    margin-bottom: 2rem;
+    min-width: 300px;
+    transition: var(--transition);
+}
+
+.rhythm-input input:focus {
+    border-color: var(--secondary-color);
+    box-shadow: 0 0 0 3px rgba(78, 205, 196, 0.2);
+    outline: none;
+}
+
+.rhythm-stats {
+    display: flex;
+    justify-content: space-around;
+    flex-wrap: wrap;
+    gap: 1rem;
 }
 
 /* Flashcards Styles */

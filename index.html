@@ -149,6 +149,7 @@
                         <button class="btn btn-outline" data-quiz="dakuten">Quiz Dakuten</button>
                         <button class="btn btn-outline" data-quiz="combinations">Quiz Kombinasi</button>
                         <button class="btn btn-outline" data-quiz="vocabulary">Kosakata</button>
+                        <button class="btn btn-outline" data-quiz="typing">Quiz Ketik</button>
                     </div>
                     <div class="quiz-content" id="quizContent">
                         <div class="quiz-question" id="quizQuestion">
@@ -157,6 +158,10 @@
                         </div>
                         <div class="quiz-options" id="quizOptions">
                             <!-- Akan diisi oleh JavaScript -->
+                        </div>
+                        <div class="quiz-typing" id="quizTyping" style="display: none;">
+                            <input type="text" id="typingAnswer" placeholder="Ketik jawaban Anda..." autocomplete="off">
+                            <button class="btn btn-primary" id="submitTyping">Submit</button>
                         </div>
                         <div class="quiz-result" id="quizResult"></div>
                     </div>
@@ -217,6 +222,56 @@
                             <div class="drawing-controls">
                                 <button class="btn btn-outline" onclick="clearCanvas()">Hapus</button>
                                 <button class="btn btn-success" onclick="nextDrawingCharacter()">Selanjutnya</button>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="game-card" id="fallingGame">
+                        <h3>Falling Hiragana</h3>
+                        <p>Ketik romaji sebelum hiragana jatuh ke bawah</p>
+                        <button class="btn btn-primary" onclick="startFallingGame()">Mulai Game</button>
+                        <div class="falling-game" id="fallingGameArea" style="display: none;">
+                            <canvas id="fallingCanvas" width="600" height="400"></canvas>
+                            <input type="text" id="fallingInput" placeholder="Ketik romaji...">
+                            <div class="falling-stats">
+                                <span>Skor: <span id="fallingScore">0</span></span>
+                                <span>Level: <span id="fallingLevel">1</span></span>
+                                <span>Lives: <span id="fallingLives">3</span></span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="game-card" id="puzzleGame">
+                        <h3>Hiragana Puzzle</h3>
+                        <p>Susun potongan untuk membentuk hiragana</p>
+                        <button class="btn btn-primary" onclick="startPuzzleGame()">Mulai Game</button>
+                        <div class="puzzle-game" id="puzzleGameArea" style="display: none;">
+                            <div class="puzzle-target" id="puzzleTarget">あ</div>
+                            <div class="puzzle-pieces" id="puzzlePieces"></div>
+                            <div class="puzzle-board" id="puzzleBoard"></div>
+                            <div class="puzzle-controls">
+                                <button class="btn btn-outline" onclick="shufflePuzzle()">Acak</button>
+                                <button class="btn btn-success" onclick="nextPuzzle()">Selanjutnya</button>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="game-card" id="rhythmGame">
+                        <h3>Rhythm Hiragana</h3>
+                        <p>Ketik hiragana mengikuti irama musik</p>
+                        <button class="btn btn-primary" onclick="startRhythmGame()">Mulai Game</button>
+                        <div class="rhythm-game" id="rhythmGameArea" style="display: none;">
+                            <div class="rhythm-track">
+                                <div class="rhythm-line" id="rhythmLine"></div>
+                                <div class="rhythm-notes" id="rhythmNotes"></div>
+                            </div>
+                            <div class="rhythm-input">
+                                <input type="text" id="rhythmInput" placeholder="Ketik saat tepat waktu...">
+                            </div>
+                            <div class="rhythm-stats">
+                                <span>Skor: <span id="rhythmScore">0</span></span>
+                                <span>Combo: <span id="rhythmCombo">0</span></span>
+                                <span>Akurasi: <span id="rhythmAccuracy">100%</span></span>
                             </div>
                         </div>
                     </div>

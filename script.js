@@ -10,6 +10,45 @@ let quizStats = {
     incorrect: 0
 };
 
+// Game variables
+let memoryGameActive = false;
+let memoryCards = [];
+let memoryFlippedCards = [];
+let memoryMoves = 0;
+let memoryStartTime = 0;
+
+let typingGameActive = false;
+let typingScore = 0;
+let typingStartTime = 0;
+let typingCurrentChar = null;
+let typingTimeLeft = 60;
+let typingCorrectAnswers = 0;
+
+let drawingGameActive = false;
+let drawingCurrentIndex = 0;
+let drawingCanvas = null;
+let drawingContext = null;
+let isDrawing = false;
+
+let fallingGameActive = false;
+let fallingObjects = [];
+let fallingScore = 0;
+let fallingLevel = 1;
+let fallingLives = 3;
+let fallingCanvas = null;
+let fallingContext = null;
+let fallingAnimationId = null;
+
+let puzzleGameActive = false;
+let puzzlePieces = [];
+let puzzleCurrentChar = null;
+
+let rhythmGameActive = false;
+let rhythmNotes = [];
+let rhythmScore = 0;
+let rhythmCombo = 0;
+let rhythmStartTime = 0;
+
 // Initialize the application
 document.addEventListener('DOMContentLoaded', function() {
     initializeNavigation();
@@ -284,21 +323,58 @@ function initializeQuiz() {
         });
     });
     
+    // Typing quiz setup
+    const submitTypingBtn = document.getElementById('submitTyping');
+    const typingAnswerInput = document.getElementById('typingAnswer');
+    
+    submitTypingBtn.addEventListener('click', () => {
+        checkTypingAnswer();
+    });
+    
+    typingAnswerInput.addEventListener('keypress', (e) => {
+        if (e.key === 'Enter') {
+            checkTypingAnswer();
+        }
+    });
+    
     generateQuizQuestion();
 }
 
 function generateQuizQuestion() {
     const quizQuestion = document.getElementById('quizQuestion');
     const quizOptions = document.getElementById('quizOptions');
+    const quizTyping = document.getElementById('quizTyping');
     const quizResult = document.getElementById('quizResult');
     
     quizResult.innerHTML = '';
     quizOptions.innerHTML = '';
+    quizTyping.style.display = 'none';
+    quizOptions.style.display = 'grid';
     
     let quizData = hiraganaData;
     
     // Determine quiz data based on type
-    if (currentQuizType === 'dakuten') {
+    if (currentQuizType === 'typing') {
+        // Show typing interface instead of options
+        quizOptions.style.display = 'none';
+        quizTyping.style.display = 'flex';
+        
+        // Use all hiragana data for typing quiz
+        quizData = allHiraganaData;
+        const randomChar = quizData[Math.floor(Math.random() * quizData.length)];
+        currentQuizQuestion = randomChar;
+        
+        quizQuestion.innerHTML = `
+            <div class="question-character">${randomChar.char}</div>
+            <div class="question-text">Ketik romaji dari hiragana ini:</div>
+        `;
+        
+        // Clear and focus input
+        document.getElementById('typingAnswer').value = '';
+        document.getElementById('typingAnswer').focus();
+        
+        return;
+    } else if (currentQuizType === 'dakuten') {
         quizData = dakutenData;
     } else if (currentQuizType === 'combinations') {
         quizData = combinationData;
@@ -411,6 +487,32 @@ function checkQuizAnswer(selectedAnswer, correctAnswer) {
     
     // Show result
     if (selectedAnswer === correctAnswer) {
+        quizResult.innerHTML = '🎉 Benar! Jawaban Anda tepat!';
+        quizResult.className = 'quiz-result correct';
+        quizStats.correct++;
+    } else {
+        quizResult.innerHTML = `❌ Salah. Jawaban yang benar adalah: ${correctAnswer}`;
+        quizResult.className = 'quiz-result incorrect';
+        quizStats.incorrect++;
+    }
+    
+    updateQuizStats();
+    
+    // Auto generate new question after 2 seconds
+    setTimeout(() => {
+        generateQuizQuestion();
+    }, 2000);
+}
+
+function checkTypingAnswer() {
+    const typingAnswer = document.getElementById('typingAnswer').value.toLowerCase().trim();
+    const quizResult = document.getElementById('quizResult');
+    
+    if (!currentQuizQuestion) return;
+    
+    const correctAnswer = currentQuizQuestion.romaji.toLowerCase();
+    
+    if (typingAnswer === correctAnswer) {
         quizResult.innerHTML = '🎉 Benar! Jawaban Anda tepat!';
         quizResult.className = 'quiz-result correct';
         quizStats.correct++;
@@ -615,3 +717,482 @@ function handleSwipe() {
 
 // Auto-save progress periodically
 setInterval(saveProgress, 30000); // Save every 30 seconds
+
+// Mini Games Implementation
+
+// Memory Match Game
+function startMemoryGame() {
+    memoryGameActive = true;
+    memoryMoves = 0;
+    memoryStartTime = Date.now();
+    memoryFlippedCards = [];
+    
+    const gameArea = document.getElementById('memoryGrid');
+    const stats = document.getElementById('memoryStats');
+    const startBtn = document.querySelector('#memoryGame .btn');
+    
+    startBtn.style.display = 'none';
+    gameArea.style.display = 'grid';
+    stats.style.display = 'flex';
+    
+    // Create memory cards (8 pairs)
+    const selectedChars = hiraganaData.slice(0, 8);
+    memoryCards = [];
+    
+    selectedChars.forEach(char => {
+        memoryCards.push({ type: 'hiragana', value: char.char, match: char.romaji });
+        memoryCards.push({ type: 'romaji', value: char.romaji, match: char.char });
+    });
+    
+    // Shuffle cards
+    memoryCards = memoryCards.sort(() => Math.random() - 0.5);
+    
+    // Create card elements
+    gameArea.innerHTML = '';
+    gameArea.className = 'memory-grid';
+    
+    memoryCards.forEach((card, index) => {
+        const cardElement = document.createElement('div');
+        cardElement.className = 'memory-card';
+        cardElement.dataset.index = index;
+        cardElement.innerHTML = `
+            <div class="memory-card-inner">
+                <div class="memory-card-front">?</div>
+                <div class="memory-card-back">${card.value}</div>
+            </div>
+        `;
+        
+        cardElement.addEventListener('click', () => flipMemoryCard(index));
+        gameArea.appendChild(cardElement);
+    });
+    
+    updateMemoryStats();
+}
+
+function flipMemoryCard(index) {
+    if (memoryFlippedCards.length >= 2) return;
+    if (memoryFlippedCards.includes(index)) return;
+    
+    const cardElement = document.querySelector(`[data-index="${index}"]`);
+    cardElement.classList.add('flipped');
+    memoryFlippedCards.push(index);
+    
+    if (memoryFlippedCards.length === 2) {
+        memoryMoves++;
+        updateMemoryStats();
+        
+        setTimeout(() => {
+            checkMemoryMatch();
+        }, 1000);
+    }
+}
+
+function checkMemoryMatch() {
+    const [first, second] = memoryFlippedCards;
+    const firstCard = memoryCards[first];
+    const secondCard = memoryCards[second];
+    
+    if (firstCard.match === secondCard.value || secondCard.match === firstCard.value) {
+        // Match found
+        document.querySelector(`[data-index="${first}"]`).classList.add('matched');
+        document.querySelector(`[data-index="${second}"]`).classList.add('matched');
+        
+        // Check if game is complete
+        if (document.querySelectorAll('.memory-card.matched').length === memoryCards.length) {
+            endMemoryGame();
+        }
+    } else {
+        // No match
+        document.querySelector(`[data-index="${first}"]`).classList.remove('flipped');
+        document.querySelector(`[data-index="${second}"]`).classList.remove('flipped');
+    }
+    
+    memoryFlippedCards = [];
+}
+
+function updateMemoryStats() {
+    const timeElapsed = Math.floor((Date.now() - memoryStartTime) / 1000);
+    document.getElementById('memoryTime').textContent = timeElapsed;
+    document.getElementById('memoryMoves').textContent = memoryMoves;
+}
+
+function endMemoryGame() {
+    memoryGameActive = false;
+    const timeElapsed = Math.floor((Date.now() - memoryStartTime) / 1000);
+    alert(`Selamat! Anda menyelesaikan game dalam ${memoryMoves} gerakan dan ${timeElapsed} detik!`);
+    
+    // Reset game
+    document.getElementById('memoryGrid').style.display = 'none';
+    document.getElementById('memoryStats').style.display = 'none';
+    document.querySelector('#memoryGame .btn').style.display = 'block';
+}
+
+// Speed Typing Game
+function startTypingGame() {
+    typingGameActive = true;
+    typingScore = 0;
+    typingTimeLeft = 60;
+    typingCorrectAnswers = 0;
+    typingStartTime = Date.now();
+    
+    const gameArea = document.getElementById('typingGameArea');
+    const startBtn = document.querySelector('#typingGame .btn');
+    
+    startBtn.style.display = 'none';
+    gameArea.style.display = 'block';
+    
+    generateTypingCharacter();
+    
+    const input = document.getElementById('typingInput');
+    input.focus();
+    input.addEventListener('keypress', handleTypingInput);
+    
+    // Start timer
+    const timer = setInterval(() => {
+        typingTimeLeft--;
+        updateTypingStats();
+        
+        if (typingTimeLeft <= 0) {
+            clearInterval(timer);
+            endTypingGame();
+        }
+    }, 1000);
+}
+
+function generateTypingCharacter() {
+    const randomChar = hiraganaData[Math.floor(Math.random() * hiraganaData.length)];
+    typingCurrentChar = randomChar;
+    document.getElementById('typingCharacter').textContent = randomChar.char;
+    document.getElementById('typingInput').value = '';
+}
+
+function handleTypingInput(e) {
+    if (e.key === 'Enter') {
+        const input = document.getElementById('typingInput');
+        const answer = input.value.toLowerCase().trim();
+        
+        if (answer === typingCurrentChar.romaji.toLowerCase()) {
+            typingScore += 10;
+            typingCorrectAnswers++;
+            generateTypingCharacter();
+        } else {
+            typingScore = Math.max(0, typingScore - 5);
+        }
+        
+        updateTypingStats();
+    }
+}
+
+function updateTypingStats() {
+    document.getElementById('typingScore').textContent = typingScore;
+    document.getElementById('typingTime').textContent = typingTimeLeft;
+    
+    const timeElapsed = (Date.now() - typingStartTime) / 1000 / 60; // in minutes
+    const wpm = timeElapsed > 0 ? Math.round(typingCorrectAnswers / timeElapsed) : 0;
+    document.getElementById('typingWPM').textContent = wpm;
+}
+
+function endTypingGame() {
+    typingGameActive = false;
+    alert(`Game selesai! Skor akhir: ${typingScore}`);
+    
+    // Reset game
+    document.getElementById('typingGameArea').style.display = 'none';
+    document.querySelector('#typingGame .btn').style.display = 'block';
+}
+
+// Drawing Practice Game
+function startDrawingGame() {
+    drawingGameActive = true;
+    drawingCurrentIndex = 0;
+    
+    const gameArea = document.getElementById('drawingGameArea');
+    const startBtn = document.querySelector('#drawingGame .btn');
+    
+    startBtn.style.display = 'none';
+    gameArea.style.display = 'block';
+    
+    drawingCanvas = document.getElementById('drawingCanvas');
+    drawingContext = drawingCanvas.getContext('2d');
+    
+    setupDrawingCanvas();
+    updateDrawingCharacter();
+}
+
+function setupDrawingCanvas() {
+    drawingContext.strokeStyle = '#FF6B6B';
+    drawingContext.lineWidth = 3;
+    drawingContext.lineCap = 'round';
+    
+    // Mouse events
+    drawingCanvas.addEventListener('mousedown', startDrawing);
+    drawingCanvas.addEventListener('mousemove', draw);
+    drawingCanvas.addEventListener('mouseup', stopDrawing);
+    
+    // Touch events
+    drawingCanvas.addEventListener('touchstart', startDrawing);
+    drawingCanvas.addEventListener('touchmove', draw);
+    drawingCanvas.addEventListener('touchend', stopDrawing);
+}
+
+function startDrawing(e) {
+    isDrawing = true;
+    const rect = drawingCanvas.getBoundingClientRect();
+    const x = (e.clientX || e.touches[0].clientX) - rect.left;
+    const y = (e.clientY || e.touches[0].clientY) - rect.top;
+    drawingContext.beginPath();
+    drawingContext.moveTo(x, y);
+}
+
+function draw(e) {
+    if (!isDrawing) return;
+    e.preventDefault();
+    
+    const rect = drawingCanvas.getBoundingClientRect();
+    const x = (e.clientX || e.touches[0].clientX) - rect.left;
+    const y = (e.clientY || e.touches[0].clientY) - rect.top;
+    
+    drawingContext.lineTo(x, y);
+    drawingContext.stroke();
+}
+
+function stopDrawing() {
+    isDrawing = false;
+}
+
+function clearCanvas() {
+    drawingContext.clearRect(0, 0, drawingCanvas.width, drawingCanvas.height);
+}
+
+function updateDrawingCharacter() {
+    const char = hiraganaData[drawingCurrentIndex];
+    document.getElementById('drawingCharacter').textContent = char.char;
+}
+
+function nextDrawingCharacter() {
+    clearCanvas();
+    drawingCurrentIndex = (drawingCurrentIndex + 1) % hiraganaData.length;
+    updateDrawingCharacter();
+}
+
+// Falling Hiragana Game
+function startFallingGame() {
+    fallingGameActive = true;
+    fallingScore = 0;
+    fallingLevel = 1;
+    fallingLives = 3;
+    fallingObjects = [];
+    
+    const gameArea = document.getElementById('fallingGameArea');
+    const startBtn = document.querySelector('#fallingGame .btn');
+    
+    startBtn.style.display = 'none';
+    gameArea.style.display = 'block';
+    
+    fallingCanvas = document.getElementById('fallingCanvas');
+    fallingContext = fallingCanvas.getContext('2d');
+    
+    const input = document.getElementById('fallingInput');
+    input.focus();
+    input.addEventListener('keypress', handleFallingInput);
+    
+    updateFallingStats();
+    fallingGameLoop();
+}
+
+function fallingGameLoop() {
+    if (!fallingGameActive) return;
+    
+    // Clear canvas
+    fallingContext.clearRect(0, 0, fallingCanvas.width, fallingCanvas.height);
+    
+    // Add new falling object occasionally
+    if (Math.random() < 0.02 + fallingLevel * 0.005) {
+        const char = hiraganaData[Math.floor(Math.random() * hiraganaData.length)];
+        fallingObjects.push({
+            char: char.char,
+            romaji: char.romaji,
+            x: Math.random() * (fallingCanvas.width - 50),
+            y: -50,
+            speed: 1 + fallingLevel * 0.5
+        });
+    }
+    
+    // Update and draw falling objects
+    fallingContext.font = '36px "Noto Sans JP"';
+    fallingContext.fillStyle = '#FF6B6B';
+    
+    for (let i = fallingObjects.length - 1; i >= 0; i--) {
+        const obj = fallingObjects[i];
+        obj.y += obj.speed;
+        
+        fallingContext.fillText(obj.char, obj.x, obj.y);
+        
+        // Remove if reached bottom
+        if (obj.y > fallingCanvas.height) {
+            fallingObjects.splice(i, 1);
+            fallingLives--;
+            updateFallingStats();
+            
+            if (fallingLives <= 0) {
+                endFallingGame();
+                return;
+            }
+        }
+    }
+    
+    fallingAnimationId = requestAnimationFrame(fallingGameLoop);
+}
+
+function handleFallingInput(e) {
+    if (e.key === 'Enter') {
+        const input = document.getElementById('fallingInput');
+        const answer = input.value.toLowerCase().trim();
+        
+        // Check if answer matches any falling object
+        for (let i = 0; i < fallingObjects.length; i++) {
+            if (fallingObjects[i].romaji.toLowerCase() === answer) {
+                fallingObjects.splice(i, 1);
+                fallingScore += 10 * fallingLevel;
+                input.value = '';
+                
+                // Level up every 100 points
+                if (fallingScore > 0 && fallingScore % 100 === 0) {
+                    fallingLevel++;
+                }
+                
+                updateFallingStats();
+                break;
+            }
+        }
+    }
+}
+
+function updateFallingStats() {
+    document.getElementById('fallingScore').textContent = fallingScore;
+    document.getElementById('fallingLevel').textContent = fallingLevel;
+    document.getElementById('fallingLives').textContent = fallingLives;
+}
+
+function endFallingGame() {
+    fallingGameActive = false;
+    cancelAnimationFrame(fallingAnimationId);
+    alert(`Game Over! Skor akhir: ${fallingScore}`);
+    
+    // Reset game
+    document.getElementById('fallingGameArea').style.display = 'none';
+    document.querySelector('#fallingGame .btn').style.display = 'block';
+}
+
+// Puzzle Game
+function startPuzzleGame() {
+    puzzleGameActive = true;
+    puzzleCurrentChar = hiraganaData[0];
+    
+    const gameArea = document.getElementById('puzzleGameArea');
+    const startBtn = document.querySelector('#puzzleGame .btn');
+    
+    startBtn.style.display = 'none';
+    gameArea.style.display = 'block';
+    
+    updatePuzzleDisplay();
+    generatePuzzlePieces();
+}
+
+function updatePuzzleDisplay() {
+    document.getElementById('puzzleTarget').textContent = puzzleCurrentChar.char;
+}
+
+function generatePuzzlePieces() {
+    // Simple puzzle implementation - split character into pieces
+    const piecesContainer = document.getElementById('puzzlePieces');
+    piecesContainer.innerHTML = '';
+    
+    // Create 4 puzzle pieces (simplified)
+    for (let i = 0; i < 4; i++) {
+        const piece = document.createElement('div');
+        piece.className = 'puzzle-piece';
+        piece.textContent = '◯'; // Placeholder
+        piece.draggable = true;
+        piece.addEventListener('dragstart', handlePuzzleDrag);
+        piecesContainer.appendChild(piece);
+    }
+}
+
+function handlePuzzleDrag(e) {
+    // Simplified drag implementation
+    e.dataTransfer.setData('text/plain', e.target.textContent);
+}
+
+function shufflePuzzle() {
+    generatePuzzlePieces();
+}
+
+function nextPuzzle() {
+    const currentIndex = hiraganaData.indexOf(puzzleCurrentChar);
+    puzzleCurrentChar = hiraganaData[(currentIndex + 1) % hiraganaData.length];
+    updatePuzzleDisplay();
+    generatePuzzlePieces();
+}
+
+// Rhythm Game
+function startRhythmGame() {
+    rhythmGameActive = true;
+    rhythmScore = 0;
+    rhythmCombo = 0;
+    rhythmStartTime = Date.now();
+    
+    const gameArea = document.getElementById('rhythmGameArea');
+    const startBtn = document.querySelector('#rhythmGame .btn');
+    
+    startBtn.style.display = 'none';
+    gameArea.style.display = 'block';
+    
+    const input = document.getElementById('rhythmInput');
+    input.focus();
+    input.addEventListener('keypress', handleRhythmInput);
+    
+    generateRhythmNotes();
+    updateRhythmStats();
+}
+
+function generateRhythmNotes() {
+    // Generate rhythm notes (simplified)
+    const notesContainer = document.getElementById('rhythmNotes');
+    notesContainer.innerHTML = '';
+    
+    for (let i = 0; i < 10; i++) {
+        const note = document.createElement('div');
+        note.className = 'rhythm-note';
+        const char = hiraganaData[Math.floor(Math.random() * hiraganaData.length)];
+        note.textContent = char.char;
+        note.dataset.romaji = char.romaji;
+        note.style.left = (i * 60) + 'px';
+        notesContainer.appendChild(note);
+    }
+}
+
+function handleRhythmInput(e) {
+    if (e.key === 'Enter') {
+        const input = document.getElementById('rhythmInput');
+        const answer = input.value.toLowerCase().trim();
+        
+        // Check timing and accuracy (simplified)
+        const activeNote = document.querySelector('.rhythm-note.active');
+        if (activeNote && activeNote.dataset.romaji.toLowerCase() === answer) {
+            rhythmScore += 100;
+            rhythmCombo++;
+        } else {
+            rhythmCombo = 0;
+        }
+        
+        input.value = '';
+        updateRhythmStats();
+    }
+}
+
+function updateRhythmStats() {
+    document.getElementById('rhythmScore').textContent = rhythmScore;
+    document.getElementById('rhythmCombo').textContent = rhythmCombo;
+    document.getElementById('rhythmAccuracy').textContent = '100%'; // Simplified
+}
