@@ -1433,10 +1433,19 @@ body {
     margin: 0 auto;
 }
 
+.flashcard-type-selector {
+    display: flex;
+    justify-content: center;
+    gap: 1rem;
+    margin-bottom: 3rem;
+    flex-wrap: wrap;
+}
+
 .flashcard {
     perspective: 1000px;
     height: 350px;
     margin-bottom: 2rem;
+    cursor: pointer;
 }
 
 .flashcard-inner {
@@ -1484,6 +1493,12 @@ body {
     animation: flashcardFloat 3s ease-in-out infinite alternate;
 }
 
+.flashcard-info {
+    color: var(--text-muted);
+    font-size: 0.9rem;
+    margin-bottom: 1rem;
+}
+
 @keyframes flashcardFloat {
     0% { transform: translateY(0px); }
     100% { transform: translateY(-10px); }
@@ -1494,6 +1509,10 @@ body {
     display: flex;
     flex-direction: column;
     gap: 3rem;
+}
+
+.stats-header {
+    margin-bottom: 3rem;
 }
 
 .stats-overview {
@@ -1545,6 +1564,85 @@ body {
 @keyframes progressRotate {
     0% { transform: rotate(0deg); }
     100% { transform: rotate(5deg); }
+}
+
+.category-progress {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+}
+
+.category-item {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+
+.progress-bar-small {
+    flex: 1;
+    height: 8px;
+    background: var(--bg-tertiary);
+    border-radius: 4px;
+    overflow: hidden;
+}
+
+.progress-fill-small {
+    height: 100%;
+    background: var(--gradient-primary);
+    width: 0%;
+    transition: width 1s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.learning-tips {
+    background: var(--gradient-card);
+    border-radius: var(--radius-lg);
+    padding: 2rem;
+    border: 1px solid var(--border-light);
+}
+
+.tips-list {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+.tip-item {
+    padding: 1rem;
+    background: var(--bg-secondary);
+    border-radius: var(--radius);
+    border-left: 4px solid var(--secondary-color);
+}
+
+.study-calendar {
+    background: var(--gradient-card);
+    border-radius: var(--radius-lg);
+    padding: 2rem;
+    border: 1px solid var(--border-light);
+    text-align: center;
+}
+
+.calendar-grid {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    gap: 0.5rem;
+    margin-top: 1rem;
+}
+
+.calendar-day {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background: var(--bg-secondary);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 600;
+    transition: var(--transition);
+}
+
+.calendar-day.active {
+    background: var(--gradient-primary);
+    color: white;
 }
 
 /* Responsive Design */

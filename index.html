@@ -283,10 +283,12 @@
                 <h2 class="section-title">Flashcards</h2>
                 <div class="flashcard-container">
                     <div class="flashcard-controls">
+                        <div class="flashcard-type-selector">
                         <button class="btn btn-outline active" data-flashcard="basic">Hiragana Dasar</button>
                         <button class="btn btn-outline" data-flashcard="dakuten">Dakuten</button>
                         <button class="btn btn-outline" data-flashcard="combinations">Kombinasi</button>
                         <button class="btn btn-outline" data-flashcard="vocabulary">Kosakata</button>
+                        </div>
                     </div>
                     
                     <div class="flashcard" id="flashcard">
@@ -309,6 +311,7 @@
                     
                     <div class="flashcard-progress">
                         <span id="flashcardProgress">1 / 46</span>
+                        <div class="flashcard-info">Klik kartu untuk membalik</div>
                         <div class="difficulty-buttons">
                             <button class="btn btn-error" onclick="markDifficult()">Sulit</button>
                             <button class="btn btn-warning" onclick="markMedium()">Sedang</button>
@@ -322,6 +325,7 @@
             <section class="section" id="statistics">
                 <h2 class="section-title">Statistik Pembelajaran</h2>
                 <div class="stats-container">
+                    <div class="stats-header">
                     <div class="stats-overview">
                         <div class="stat-card">
                             <h3>Progress Keseluruhan</h3>
@@ -351,6 +355,7 @@
                                 <span class="streak-label">hari berturut-turut</span>
                             </div>
                         </div>
+                    </div>
                     </div>
                     
                     <div class="stats-details">
@@ -395,11 +400,33 @@
                             </div>
                         </div>
                         
+                        <div class="learning-tips">
+                            <h3>Tips Pembelajaran</h3>
+                            <div class="tips-list">
+                                <div class="tip-item">💡 Latih menulis hiragana setiap hari untuk muscle memory</div>
+                                <div class="tip-item">🎯 Fokus pada karakter yang sering salah di quiz</div>
+                                <div class="tip-item">🎮 Gunakan mini games untuk pembelajaran yang menyenangkan</div>
+                                <div class="tip-item">📚 Pelajari kosakata untuk konteks penggunaan</div>
+                            </div>
+                        </div>
                         <div class="achievements">
                             <h3>Pencapaian</h3>
                             <div class="achievement-grid" id="achievementGrid">
                                 <!-- Achievements akan diisi oleh JavaScript -->
                             </div>
+                        </div>
+                    </div>
+                    
+                    <div class="study-calendar">
+                        <h3>Kalender Belajar</h3>
+                        <div class="calendar-grid">
+                            <div class="calendar-day active">S</div>
+                            <div class="calendar-day">M</div>
+                            <div class="calendar-day active">T</div>
+                            <div class="calendar-day active">W</div>
+                            <div class="calendar-day">T</div>
+                            <div class="calendar-day active">F</div>
+                            <div class="calendar-day active">S</div>
                         </div>
                     </div>
                 </div>

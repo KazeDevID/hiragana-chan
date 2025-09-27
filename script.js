@@ -718,6 +718,174 @@ function handleSwipe() {
 // Auto-save progress periodically
 setInterval(saveProgress, 30000); // Save every 30 seconds
 
+// Flashcards Implementation
+let flashcardData = hiraganaData;
+let currentFlashcardIndex = 0;
+let flashcardType = 'basic';
+let isFlashcardFlipped = false;
+
+function initializeFlashcards() {
+    const flashcardTypeButtons = document.querySelectorAll('[data-flashcard]');
+    const prevBtn = document.getElementById('prevFlashcard');
+    const nextBtn = document.getElementById('nextFlashcard');
+    const flipBtn = document.getElementById('flipFlashcard');
+    
+    flashcardTypeButtons.forEach(button => {
+        button.addEventListener('click', () => {
+            flashcardTypeButtons.forEach(btn => btn.classList.remove('active'));
+            button.classList.add('active');
+            flashcardType = button.dataset.flashcard;
+            updateFlashcardData();
+            currentFlashcardIndex = 0;
+            updateFlashcardDisplay();
+        });
+    });
+    
+    prevBtn.addEventListener('click', () => {
+        if (currentFlashcardIndex > 0) {
+            currentFlashcardIndex--;
+            updateFlashcardDisplay();
+        }
+    });
+    
+    nextBtn.addEventListener('click', () => {
+        if (currentFlashcardIndex < flashcardData.length - 1) {
+            currentFlashcardIndex++;
+            updateFlashcardDisplay();
+        }
+    });
+    
+    flipBtn.addEventListener('click', () => {
+        flipFlashcard();
+    });
+    
+    // Click to flip
+    document.getElementById('flashcard').addEventListener('click', () => {
+        flipFlashcard();
+    });
+    
+    updateFlashcardData();
+    updateFlashcardDisplay();
+}
+
+function updateFlashcardData() {
+    switch (flashcardType) {
+        case 'basic':
+            flashcardData = hiraganaData;
+            break;
+        case 'dakuten':
+            flashcardData = dakutenData;
+            break;
+        case 'combinations':
+            flashcardData = combinationData;
+            break;
+        case 'vocabulary':
+            flashcardData = vocabularyData;
+            break;
+        default:
+            flashcardData = hiraganaData;
+    }
+}
+
+function updateFlashcardDisplay() {
+    const flashcard = document.getElementById('flashcard');
+    const character = document.getElementById('flashcardCharacter');
+    const romaji = document.getElementById('flashcardRomaji');
+    const meaning = document.getElementById('flashcardMeaning');
+    const progress = document.getElementById('flashcardProgress');
+    
+    const currentData = flashcardData[currentFlashcardIndex];
+    
+    if (flashcardType === 'vocabulary') {
+        character.textContent = currentData.hiragana;
+        romaji.textContent = currentData.romaji;
+        meaning.textContent = currentData.meaning;
+    } else {
+        character.textContent = currentData.char;
+        romaji.textContent = currentData.romaji;
+        meaning.textContent = currentData.meaning;
+    }
+    
+    progress.textContent = `${currentFlashcardIndex + 1} / ${flashcardData.length}`;
+    
+    // Reset flip state
+    flashcard.classList.remove('flipped');
+    isFlashcardFlipped = false;
+}
+
+function flipFlashcard() {
+    const flashcard = document.getElementById('flashcard');
+    flashcard.classList.toggle('flipped');
+    isFlashcardFlipped = !isFlashcardFlipped;
+}
+
+function markDifficult() {
+    // Implementation for marking difficulty
+    console.log('Marked as difficult');
+}
+
+function markMedium() {
+    // Implementation for marking difficulty
+    console.log('Marked as medium');
+}
+
+function markEasy() {
+    // Implementation for marking difficulty
+    console.log('Marked as easy');
+}
+
+// Statistics Implementation
+function initializeStatistics() {
+    updateStatistics();
+}
+
+function updateStatistics() {
+    // Update overall progress
+    const totalCharacters = allHiraganaData.length;
+    const learnedCount = learnedCharacters.size;
+    const progressPercentage = Math.round((learnedCount / totalCharacters) * 100);
+    
+    const overallProgressElement = document.getElementById('overallProgress');
+    const overallProgressValue = document.getElementById('overallProgressValue');
+    
+    if (overallProgressElement && overallProgressValue) {
+        overallProgressElement.style.background = `conic-gradient(var(--primary-color) ${progressPercentage * 3.6}deg, var(--border-color) 0deg)`;
+        overallProgressValue.textContent = progressPercentage + '%';
+    }
+    
+    // Update category progress
+    updateCategoryProgress('basic', hiraganaData, 'basicProgress', 'basicCount');
+    updateCategoryProgress('dakuten', dakutenData, 'dakutenProgress', 'dakutenCount');
+    updateCategoryProgress('handakuten', handakutenData, 'handakutenProgress', 'handakutenCount');
+    updateCategoryProgress('combinations', combinationData, 'combinationsProgress', 'combinationsCount');
+    
+    // Update time stats (placeholder)
+    const todayTime = document.getElementById('todayTime');
+    const totalTime = document.getElementById('totalTime');
+    const streakNumber = document.getElementById('streakNumber');
+    
+    if (todayTime) todayTime.textContent = '15 menit';
+    if (totalTime) totalTime.textContent = '2 jam 30 menit';
+    if (streakNumber) streakNumber.textContent = '7';
+}
+
+function updateCategoryProgress(category, data, progressId, countId) {
+    const learned = data.filter(item => learnedCharacters.has(item.char)).length;
+    const total = data.length;
+    const percentage = total > 0 ? (learned / total) * 100 : 0;
+    
+    const progressElement = document.getElementById(progressId);
+    const countElement = document.getElementById(countId);
+    
+    if (progressElement) {
+        progressElement.style.width = percentage + '%';
+    }
+    
+    if (countElement) {
+        countElement.textContent = `${learned}/${total}`;
+    }
+}
+
 // Mini Games Implementation
 
 // Memory Match Game
