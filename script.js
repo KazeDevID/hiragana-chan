@@ -1364,3 +1364,404 @@ function updateRhythmStats() {
     document.getElementById('rhythmCombo').textContent = rhythmCombo;
     document.getElementById('rhythmAccuracy').textContent = '100%'; // Simplified
 }
+
+// Minna no Nihongo Implementation
+let currentMinnaTab = 'overview';
+let currentVocabGroup = 'group1';
+let currentVerbGroup = 'copula';
+let currentGrammarChapter = 'chapter1';
+let currentKatakanaType = 'basic';
+let minnaQuizStats = { correct: 0, incorrect: 0 };
+let currentMinnaQuizType = 'vocab-recognition';
+let currentMinnaQuestion = null;
+
+function initializeMinnaNoNihongo() {
+    initializeMinnaNavigation();
+    initializeKatakanaGrid();
+    initializeVocabularyDisplay();
+    initializeGrammarDisplay();
+    initializeCultureDisplay();
+    initializeMinnaQuiz();
+    updateMinnaProgress();
+}
+
+function initializeMinnaNavigation() {
+    const chapterButtons = document.querySelectorAll('[data-chapter]');
+    const tabs = document.querySelectorAll('.minna-tab');
+    
+    chapterButtons.forEach(button => {
+        button.addEventListener('click', () => {
+            const targetTab = button.dataset.chapter;
+            
+            // Update active button
+            chapterButtons.forEach(btn => btn.classList.remove('active'));
+            button.classList.add('active');
+            
+            // Update active tab
+            tabs.forEach(tab => tab.classList.remove('active'));
+            document.getElementById(targetTab).classList.add('active');
+            
+            currentMinnaTab = targetTab;
+        });
+    });
+}
+
+function initializeKatakanaGrid() {
+    const typeButtons = document.querySelectorAll('[data-katakana-type]');
+    
+    typeButtons.forEach(button => {
+        button.addEventListener('click', () => {
+            typeButtons.forEach(btn => btn.classList.remove('active'));
+            button.classList.add('active');
+            currentKatakanaType = button.dataset.katakanaType;
+            updateKatakanaGrid();
+        });
+    });
+    
+    updateKatakanaGrid();
+}
+
+function updateKatakanaGrid() {
+    const grid = document.getElementById('katakanaGrid');
+    if (!grid) return;
+    
+    let data = [];
+    switch (currentKatakanaType) {
+        case 'basic':
+            data = katakanaData;
+            break;
+        case 'dakuten':
+            data = katakanaDakutenData;
+            break;
+        case 'handakuten':
+            data = katakanaHandakutenData;
+            break;
+    }
+    
+    grid.innerHTML = '';
+    data.forEach(item => {
+        const card = document.createElement('div');
+        card.className = 'hiragana-card katakana-card';
+        card.innerHTML = `
+            <div class="hiragana-char">${item.char}</div>
+            <div class="hiragana-romaji">${item.romaji}</div>
+        `;
+        
+        card.addEventListener('click', () => {
+            showCharacterModal(item);
+        });
+        
+        grid.appendChild(card);
+    });
+}
+
+function initializeVocabularyDisplay() {
+    const groupButtons = document.querySelectorAll('[data-vocab-group]');
+    const verbButtons = document.querySelectorAll('[data-verb-group]');
+    
+    groupButtons.forEach(button => {
+        button.addEventListener('click', () => {
+            groupButtons.forEach(btn => btn.classList.remove('active'));
+            button.classList.add('active');
+            currentVocabGroup = button.dataset.vocabGroup;
+            updateVocabularyDisplay();
+        });
+    });
+    
+    verbButtons.forEach(button => {
+        button.addEventListener('click', () => {
+            verbButtons.forEach(btn => btn.classList.remove('active'));
+            button.classList.add('active');
+            currentVerbGroup = button.dataset.verbGroup;
+            updateVerbDisplay();
+        });
+    });
+    
+    updateVocabularyDisplay();
+    updateVerbDisplay();
+}
+
+function updateVocabularyDisplay() {
+    const display = document.getElementById('vocabDisplay');
+    if (!display || !minnaVocabularyGroups[currentVocabGroup]) return;
+    
+    const group = minnaVocabularyGroups[currentVocabGroup];
+    
+    display.innerHTML = `
+        <div class="vocab-group-header">
+            <h4>${group.title}</h4>
+            <p>第${group.words[0].chapter}課 - Chapter ${group.words[0].chapter}</p>
+        </div>
+        <div class="vocab-words-grid">
+            ${group.words.map(word => `
+                <div class="vocab-word-card">
+                    <div class="word-japanese">${word.japanese}</div>
+                    <div class="word-hiragana">${word.hiragana}</div>
+                    <div class="word-romaji">${word.romaji}</div>
+                    <div class="word-meaning">${word.meaning}</div>
+                    <div class="word-type">${word.type}</div>
+                </div>
+            `).join('')}
+        </div>
+    `;
+}
+
+function updateVerbDisplay() {
+    const display = document.getElementById('verbDisplay');
+    if (!display || !minnaVerbGroups[currentVerbGroup]) return;
+    
+    const group = minnaVerbGroups[currentVerbGroup];
+    
+    display.innerHTML = `
+        <div class="verb-group-header">
+            <h4>${group.title}</h4>
+        </div>
+        <div class="verb-words-grid">
+            ${group.verbs.map(verb => `
+                <div class="verb-word-card">
+                    <div class="word-japanese">${verb.japanese}</div>
+                    <div class="word-hiragana">${verb.hiragana}</div>
+                    <div class="word-romaji">${verb.romaji}</div>
+                    <div class="word-meaning">${verb.meaning}</div>
+                    <div class="word-group">Group: ${verb.group}</div>
+                </div>
+            `).join('')}
+        </div>
+    `;
+}
+
+function initializeGrammarDisplay() {
+    const chapterButtons = document.querySelectorAll('[data-grammar-chapter]');
+    
+    chapterButtons.forEach(button => {
+        button.addEventListener('click', () => {
+            chapterButtons.forEach(btn => btn.classList.remove('active'));
+            button.classList.add('active');
+            currentGrammarChapter = button.dataset.grammarChapter;
+            updateGrammarDisplay();
+        });
+    });
+    
+    updateGrammarDisplay();
+}
+
+function updateGrammarDisplay() {
+    const display = document.getElementById('grammarDisplay');
+    if (!display || !minnaGrammarPoints[currentGrammarChapter]) return;
+    
+    const chapter = minnaGrammarPoints[currentGrammarChapter];
+    
+    display.innerHTML = `
+        <div class="grammar-chapter-header">
+            <h4>${chapter.title}</h4>
+        </div>
+        <div class="grammar-points">
+            ${chapter.points.map(point => `
+                <div class="grammar-point-card">
+                    <div class="grammar-pattern">${point.pattern}</div>
+                    <div class="grammar-explanation">${point.explanation}</div>
+                    <div class="grammar-examples">
+                        <h5>例文 (Examples):</h5>
+                        ${point.examples.map(example => `
+                            <div class="example">${example}</div>
+                        `).join('')}
+                    </div>
+                </div>
+            `).join('')}
+        </div>
+    `;
+}
+
+function initializeCultureDisplay() {
+    const cultureCards = document.querySelectorAll('[data-culture]');
+    
+    cultureCards.forEach(card => {
+        card.addEventListener('click', () => {
+            const cultureType = card.dataset.culture;
+            updateCultureDisplay(cultureType);
+        });
+    });
+}
+
+function updateCultureDisplay(cultureType) {
+    const display = document.getElementById('cultureDetail');
+    if (!display || !culturalNotes[cultureType]) return;
+    
+    const culture = culturalNotes[cultureType];
+    
+    display.innerHTML = `
+        <div class="culture-detail-content">
+            <h4>${culture.title}</h4>
+            <div class="culture-content">
+                ${culture.content.map(item => `
+                    <div class="culture-item">• ${item}</div>
+                `).join('')}
+            </div>
+        </div>
+    `;
+    
+    display.style.display = 'block';
+}
+
+function initializeMinnaQuiz() {
+    const quizTypeButtons = document.querySelectorAll('[data-minna-quiz]');
+    
+    quizTypeButtons.forEach(button => {
+        button.addEventListener('click', () => {
+            quizTypeButtons.forEach(btn => btn.classList.remove('active'));
+            button.classList.add('active');
+            currentMinnaQuizType = button.dataset.minnaQuiz;
+            generateMinnaQuizQuestion();
+        });
+    });
+    
+    generateMinnaQuizQuestion();
+}
+
+function generateMinnaQuizQuestion() {
+    const questionDiv = document.getElementById('minnaQuizQuestion');
+    const optionsDiv = document.getElementById('minnaQuizOptions');
+    const resultDiv = document.getElementById('minnaQuizResult');
+    
+    if (!questionDiv || !optionsDiv || !resultDiv) return;
+    
+    resultDiv.innerHTML = '';
+    
+    let questionData = null;
+    let correctAnswer = '';
+    let wrongAnswers = [];
+    
+    switch (currentMinnaQuizType) {
+        case 'vocab-recognition':
+            // Random vocabulary from all groups
+            const allVocab = Object.values(minnaVocabularyGroups).flatMap(group => group.words);
+            questionData = allVocab[Math.floor(Math.random() * allVocab.length)];
+            correctAnswer = questionData.meaning;
+            wrongAnswers = allVocab
+                .filter(word => word.meaning !== correctAnswer)
+                .sort(() => 0.5 - Math.random())
+                .slice(0, 3)
+                .map(word => word.meaning);
+            
+            questionDiv.innerHTML = `
+                <div class="question-character">${questionData.japanese}</div>
+                <div class="question-text">What does this word mean?</div>
+            `;
+            break;
+            
+        case 'vocab-translation':
+            const allVocab2 = Object.values(minnaVocabularyGroups).flatMap(group => group.words);
+            questionData = allVocab2[Math.floor(Math.random() * allVocab2.length)];
+            correctAnswer = questionData.japanese;
+            wrongAnswers = allVocab2
+                .filter(word => word.japanese !== correctAnswer)
+                .sort(() => 0.5 - Math.random())
+                .slice(0, 3)
+                .map(word => word.japanese);
+            
+            questionDiv.innerHTML = `
+                <div class="question-character" style="font-family: inherit;">${questionData.meaning}</div>
+                <div class="question-text">How do you say this in Japanese?</div>
+            `;
+            break;
+            
+        case 'katakana-reading':
+            const allKatakana = [...katakanaData, ...katakanaDakutenData, ...katakanaHandakutenData];
+            questionData = allKatakana[Math.floor(Math.random() * allKatakana.length)];
+            correctAnswer = questionData.romaji;
+            wrongAnswers = allKatakana
+                .filter(char => char.romaji !== correctAnswer)
+                .sort(() => 0.5 - Math.random())
+                .slice(0, 3)
+                .map(char => char.romaji);
+            
+            questionDiv.innerHTML = `
+                <div class="question-character">${questionData.char}</div>
+                <div class="question-text">How do you read this katakana?</div>
+            `;
+            break;
+    }
+    
+    if (questionData) {
+        currentMinnaQuestion = { data: questionData, correct: correctAnswer };
+        
+        const allOptions = [correctAnswer, ...wrongAnswers].sort(() => 0.5 - Math.random());
+        
+        optionsDiv.innerHTML = '';
+        allOptions.forEach(option => {
+            const optionButton = document.createElement('button');
+            optionButton.className = 'quiz-option';
+            optionButton.textContent = option;
+            optionButton.addEventListener('click', () => checkMinnaQuizAnswer(option, correctAnswer));
+            optionsDiv.appendChild(optionButton);
+        });
+    }
+}
+
+function checkMinnaQuizAnswer(selectedAnswer, correctAnswer) {
+    const resultDiv = document.getElementById('minnaQuizResult');
+    const options = document.querySelectorAll('#minnaQuizOptions .quiz-option');
+    
+    // Disable all options
+    options.forEach(option => {
+        option.style.pointerEvents = 'none';
+        if (option.textContent === correctAnswer) {
+            option.classList.add('correct');
+        } else if (option.textContent === selectedAnswer && selectedAnswer !== correctAnswer) {
+            option.classList.add('incorrect');
+        }
+    });
+    
+    // Show result
+    if (selectedAnswer === correctAnswer) {
+        resultDiv.innerHTML = '🎉 正解！ (Correct!)';
+        resultDiv.className = 'quiz-result correct';
+        minnaQuizStats.correct++;
+    } else {
+        resultDiv.innerHTML = `❌ 不正解。正解は: ${correctAnswer}`;
+        resultDiv.className = 'quiz-result incorrect';
+        minnaQuizStats.incorrect++;
+    }
+    
+    updateMinnaQuizStats();
+    
+    // Auto generate new question after 2 seconds
+    setTimeout(() => {
+        generateMinnaQuizQuestion();
+    }, 2000);
+}
+
+function updateMinnaQuizStats() {
+    const correctElement = document.getElementById('minnaCorrectCount');
+    const incorrectElement = document.getElementById('minnaIncorrectCount');
+    const accuracyElement = document.getElementById('minnaAccuracy');
+    
+    if (correctElement) correctElement.textContent = minnaQuizStats.correct;
+    if (incorrectElement) incorrectElement.textContent = minnaQuizStats.incorrect;
+    
+    const total = minnaQuizStats.correct + minnaQuizStats.incorrect;
+    const accuracy = total > 0 ? Math.round((minnaQuizStats.correct / total) * 100) : 0;
+    if (accuracyElement) accuracyElement.textContent = accuracy + '%';
+}
+
+function updateMinnaProgress() {
+    // Update progress indicators
+    const vocabProgress = document.getElementById('minnaVocabProgress');
+    const grammarProgress = document.getElementById('minnaGrammarProgress');
+    const katakanaProgress = document.getElementById('minnaKatakanaProgress');
+    
+    if (vocabProgress) {
+        const totalVocab = Object.values(minnaVocabularyGroups).reduce((sum, group) => sum + group.words.length, 0);
+        vocabProgress.textContent = `0/${totalVocab}`;
+    }
+    
+    if (grammarProgress) {
+        const totalGrammar = Object.values(minnaGrammarPoints).reduce((sum, chapter) => sum + chapter.points.length, 0);
+        grammarProgress.textContent = `0/${totalGrammar}`;
+    }
+    
+    if (katakanaProgress) {
+        const totalKatakana = katakanaData.length + katakanaDakutenData.length + katakanaHandakutenData.length;
+        katakanaProgress.textContent = `0/${totalKatakana}`;
+    }
+}

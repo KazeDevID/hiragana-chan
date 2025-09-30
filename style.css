@@ -1645,6 +1645,623 @@ body {
     color: white;
 }
 
+/* Minna no Nihongo Styles */
+.minna-container {
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+.chapter-nav {
+    display: flex;
+    justify-content: center;
+    gap: 1rem;
+    margin-bottom: 3rem;
+    flex-wrap: wrap;
+}
+
+.minna-tab {
+    display: none;
+    animation: sectionFadeIn 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.minna-tab.active {
+    display: block;
+}
+
+/* Overview Styles */
+.overview-content {
+    display: flex;
+    flex-direction: column;
+    gap: 3rem;
+}
+
+.course-intro {
+    background: var(--gradient-card);
+    padding: 2.5rem;
+    border-radius: var(--radius-lg);
+    text-align: center;
+    border: 1px solid var(--border-light);
+}
+
+.course-intro h3 {
+    color: var(--text-primary);
+    margin-bottom: 1.5rem;
+    font-size: 1.8rem;
+}
+
+.course-intro p {
+    color: var(--text-secondary);
+    font-size: 1.1rem;
+    line-height: 1.7;
+    margin-bottom: 1rem;
+}
+
+.learning-objectives {
+    background: var(--gradient-card);
+    padding: 2.5rem;
+    border-radius: var(--radius-lg);
+    border: 1px solid var(--border-light);
+}
+
+.learning-objectives h3 {
+    color: var(--text-primary);
+    margin-bottom: 2rem;
+    text-align: center;
+    font-size: 1.8rem;
+}
+
+.objectives-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 2rem;
+}
+
+.objective-card {
+    background: var(--bg-secondary);
+    padding: 2rem;
+    border-radius: var(--radius);
+    border: 1px solid var(--border-light);
+    transition: var(--transition);
+}
+
+.objective-card:hover {
+    transform: translateY(-3px);
+    box-shadow: var(--shadow-lg);
+}
+
+.objective-card h4 {
+    color: var(--accent-color);
+    margin-bottom: 1rem;
+    font-size: 1.3rem;
+}
+
+.objective-card ul {
+    list-style: none;
+    padding: 0;
+}
+
+.objective-card li {
+    color: var(--text-secondary);
+    margin-bottom: 0.5rem;
+    padding-left: 1.5rem;
+    position: relative;
+}
+
+.objective-card li::before {
+    content: '•';
+    color: var(--secondary-color);
+    position: absolute;
+    left: 0;
+    font-weight: bold;
+}
+
+.progress-overview {
+    background: var(--gradient-card);
+    padding: 2.5rem;
+    border-radius: var(--radius-lg);
+    border: 1px solid var(--border-light);
+}
+
+.progress-overview h3 {
+    color: var(--text-primary);
+    margin-bottom: 2rem;
+    text-align: center;
+    font-size: 1.8rem;
+}
+
+.progress-stats {
+    display: flex;
+    justify-content: space-around;
+    flex-wrap: wrap;
+    gap: 2rem;
+}
+
+.stat-item {
+    text-align: center;
+    background: var(--bg-secondary);
+    padding: 1.5rem;
+    border-radius: var(--radius);
+    border: 1px solid var(--border-light);
+    min-width: 150px;
+}
+
+.stat-number {
+    display: block;
+    font-size: 2.5rem;
+    font-weight: 700;
+    background: var(--gradient-primary);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    margin-bottom: 0.5rem;
+}
+
+.stat-label {
+    color: var(--text-secondary);
+    font-size: 0.9rem;
+    font-weight: 500;
+}
+
+/* Katakana Styles */
+.katakana-content {
+    display: flex;
+    flex-direction: column;
+    gap: 3rem;
+}
+
+.writing-system-intro {
+    background: var(--gradient-card);
+    padding: 2.5rem;
+    border-radius: var(--radius-lg);
+    border: 1px solid var(--border-light);
+}
+
+.writing-system-intro h3 {
+    color: var(--text-primary);
+    margin-bottom: 1.5rem;
+    font-size: 1.8rem;
+}
+
+.writing-system-intro p {
+    color: var(--text-secondary);
+    font-size: 1.1rem;
+    line-height: 1.7;
+    margin-bottom: 2rem;
+}
+
+.usage-examples {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 1.5rem;
+}
+
+.usage-card {
+    background: var(--bg-secondary);
+    padding: 1.5rem;
+    border-radius: var(--radius);
+    border: 1px solid var(--border-light);
+}
+
+.usage-card h4 {
+    color: var(--secondary-color);
+    margin-bottom: 1rem;
+    font-size: 1.2rem;
+}
+
+.usage-card p {
+    color: var(--text-secondary);
+    margin-bottom: 0.5rem;
+    font-family: var(--font-japanese);
+}
+
+.katakana-practice {
+    background: var(--gradient-card);
+    padding: 2.5rem;
+    border-radius: var(--radius-lg);
+    border: 1px solid var(--border-light);
+}
+
+.katakana-practice h3 {
+    color: var(--text-primary);
+    margin-bottom: 2rem;
+    text-align: center;
+    font-size: 1.8rem;
+}
+
+.katakana-card {
+    border-left: 4px solid var(--accent-color);
+}
+
+/* Vocabulary Styles */
+.vocabulary-content {
+    display: flex;
+    flex-direction: column;
+    gap: 3rem;
+}
+
+.vocab-group-selector,
+.verb-group-selector {
+    display: flex;
+    justify-content: center;
+    gap: 0.5rem;
+    flex-wrap: wrap;
+    margin-bottom: 2rem;
+}
+
+.vocab-group-selector .btn,
+.verb-group-selector .btn {
+    font-size: 0.85rem;
+    padding: 0.6rem 1rem;
+}
+
+.vocab-display,
+.verb-display {
+    background: var(--gradient-card);
+    padding: 2.5rem;
+    border-radius: var(--radius-lg);
+    border: 1px solid var(--border-light);
+}
+
+.vocab-group-header,
+.verb-group-header {
+    text-align: center;
+    margin-bottom: 2rem;
+}
+
+.vocab-group-header h4,
+.verb-group-header h4 {
+    color: var(--text-primary);
+    font-size: 1.5rem;
+    margin-bottom: 0.5rem;
+}
+
+.vocab-group-header p {
+    color: var(--text-secondary);
+    font-size: 1rem;
+}
+
+.vocab-words-grid,
+.verb-words-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 1.5rem;
+}
+
+.vocab-word-card,
+.verb-word-card {
+    background: var(--bg-secondary);
+    padding: 1.5rem;
+    border-radius: var(--radius);
+    border: 1px solid var(--border-light);
+    transition: var(--transition);
+}
+
+.vocab-word-card:hover,
+.verb-word-card:hover {
+    transform: translateY(-3px);
+    box-shadow: var(--shadow-lg);
+    border-color: var(--secondary-color);
+}
+
+.word-japanese {
+    font-size: 1.8rem;
+    font-family: var(--font-japanese);
+    color: var(--text-primary);
+    margin-bottom: 0.5rem;
+    font-weight: 500;
+}
+
+.word-hiragana {
+    font-size: 1.2rem;
+    font-family: var(--font-japanese);
+    color: var(--accent-color);
+    margin-bottom: 0.5rem;
+}
+
+.word-romaji {
+    font-size: 1rem;
+    color: var(--text-secondary);
+    font-style: italic;
+    margin-bottom: 0.75rem;
+}
+
+.word-meaning {
+    font-size: 1.1rem;
+    color: var(--text-primary);
+    font-weight: 500;
+    margin-bottom: 0.5rem;
+}
+
+.word-type,
+.word-group {
+    font-size: 0.85rem;
+    color: var(--text-muted);
+    background: var(--bg-tertiary);
+    padding: 0.25rem 0.75rem;
+    border-radius: 12px;
+    display: inline-block;
+}
+
+.verb-groups {
+    background: var(--gradient-card);
+    padding: 2.5rem;
+    border-radius: var(--radius-lg);
+    border: 1px solid var(--border-light);
+}
+
+.verb-groups h3 {
+    color: var(--text-primary);
+    margin-bottom: 2rem;
+    text-align: center;
+    font-size: 1.8rem;
+}
+
+/* Grammar Styles */
+.grammar-content {
+    display: flex;
+    flex-direction: column;
+    gap: 3rem;
+}
+
+.grammar-chapter-selector {
+    display: flex;
+    justify-content: center;
+    gap: 1rem;
+    margin-bottom: 2rem;
+}
+
+.grammar-display {
+    background: var(--gradient-card);
+    padding: 2.5rem;
+    border-radius: var(--radius-lg);
+    border: 1px solid var(--border-light);
+}
+
+.grammar-chapter-header {
+    text-align: center;
+    margin-bottom: 2rem;
+}
+
+.grammar-chapter-header h4 {
+    color: var(--text-primary);
+    font-size: 1.8rem;
+}
+
+.grammar-points {
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+}
+
+.grammar-point-card {
+    background: var(--bg-secondary);
+    padding: 2rem;
+    border-radius: var(--radius);
+    border: 1px solid var(--border-light);
+    border-left: 4px solid var(--secondary-color);
+}
+
+.grammar-pattern {
+    font-size: 1.5rem;
+    font-family: var(--font-japanese);
+    color: var(--accent-color);
+    font-weight: 600;
+    margin-bottom: 1rem;
+}
+
+.grammar-explanation {
+    color: var(--text-secondary);
+    font-size: 1.1rem;
+    line-height: 1.6;
+    margin-bottom: 1.5rem;
+}
+
+.grammar-examples h5 {
+    color: var(--text-primary);
+    margin-bottom: 1rem;
+    font-size: 1.1rem;
+}
+
+.example {
+    background: var(--bg-tertiary);
+    padding: 1rem;
+    border-radius: var(--radius-sm);
+    margin-bottom: 0.75rem;
+    font-family: var(--font-japanese);
+    color: var(--text-secondary);
+    border-left: 3px solid var(--primary-color);
+}
+
+/* Culture Styles */
+.culture-content {
+    display: flex;
+    flex-direction: column;
+    gap: 3rem;
+}
+
+.culture-topics {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 2rem;
+}
+
+.culture-card {
+    background: var(--gradient-card);
+    padding: 2rem;
+    border-radius: var(--radius-lg);
+    border: 1px solid var(--border-light);
+    cursor: pointer;
+    transition: var(--transition);
+}
+
+.culture-card:hover {
+    transform: translateY(-5px);
+    box-shadow: var(--shadow-lg);
+    border-color: var(--secondary-color);
+}
+
+.culture-card h4 {
+    color: var(--text-primary);
+    margin-bottom: 1rem;
+    font-size: 1.3rem;
+}
+
+.culture-card p {
+    color: var(--text-secondary);
+    line-height: 1.6;
+}
+
+.culture-detail {
+    display: none;
+    background: var(--gradient-card);
+    padding: 2.5rem;
+    border-radius: var(--radius-lg);
+    border: 1px solid var(--border-light);
+    animation: sectionFadeIn 0.6s ease-out;
+}
+
+.culture-detail-content h4 {
+    color: var(--text-primary);
+    margin-bottom: 1.5rem;
+    font-size: 1.8rem;
+    text-align: center;
+}
+
+.culture-content .culture-item {
+    color: var(--text-secondary);
+    font-size: 1.1rem;
+    line-height: 1.7;
+    margin-bottom: 1rem;
+    padding-left: 1rem;
+}
+
+/* Minna Quiz Styles */
+.minna-quiz-content {
+    display: flex;
+    flex-direction: column;
+    gap: 3rem;
+}
+
+.minna-quiz-type-selector {
+    display: flex;
+    justify-content: center;
+    gap: 0.75rem;
+    flex-wrap: wrap;
+}
+
+.minna-quiz-type-selector .btn {
+    font-size: 0.9rem;
+    padding: 0.75rem 1.25rem;
+}
+
+.minna-quiz-container {
+    background: var(--gradient-card);
+    border-radius: var(--radius-xl);
+    padding: 3rem;
+    box-shadow: var(--shadow-lg);
+    border: 1px solid var(--border-light);
+}
+
+.minna-quiz-question {
+    text-align: center;
+    margin-bottom: 3rem;
+}
+
+.minna-quiz-options {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 1.5rem;
+    margin-bottom: 3rem;
+}
+
+.minna-quiz-result {
+    text-align: center;
+    padding: 1.5rem;
+    border-radius: var(--radius);
+    margin-bottom: 2rem;
+    font-weight: 600;
+    font-size: 1.1rem;
+    animation: resultFadeIn 0.5s ease-out;
+}
+
+.minna-quiz-stats {
+    display: flex;
+    justify-content: space-around;
+    background: var(--bg-secondary);
+    padding: 2rem;
+    border-radius: var(--radius);
+    flex-wrap: wrap;
+    gap: 2rem;
+    border: 1px solid var(--border-light);
+}
+
+/* Responsive Design for Minna */
+@media (max-width: 768px) {
+    .chapter-nav {
+        flex-direction: column;
+        align-items: center;
+        gap: 0.5rem;
+    }
+    
+    .chapter-nav .btn {
+        width: 100%;
+        max-width: 300px;
+    }
+    
+    .objectives-grid {
+        grid-template-columns: 1fr;
+    }
+    
+    .progress-stats {
+        flex-direction: column;
+        align-items: center;
+    }
+    
+    .usage-examples {
+        grid-template-columns: 1fr;
+    }
+    
+    .vocab-group-selector,
+    .verb-group-selector {
+        flex-direction: column;
+        align-items: center;
+    }
+    
+    .vocab-group-selector .btn,
+    .verb-group-selector .btn {
+        width: 100%;
+        max-width: 280px;
+    }
+    
+    .vocab-words-grid,
+    .verb-words-grid {
+        grid-template-columns: 1fr;
+    }
+    
+    .grammar-chapter-selector {
+        flex-direction: column;
+        align-items: center;
+    }
+    
+    .culture-topics {
+        grid-template-columns: 1fr;
+    }
+    
+    .minna-quiz-type-selector {
+        flex-direction: column;
+        align-items: center;
+    }
+    
+    .minna-quiz-type-selector .btn {
+        width: 100%;
+        max-width: 250px;
+    }
+    
+    .minna-quiz-options {
+        grid-template-columns: 1fr;
+    }
+}
+
 /* Responsive Design */
 @media (max-width: 768px) {
     .container {

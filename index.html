@@ -24,6 +24,7 @@
                 <button class="nav-btn" data-section="games">Mini Games</button>
                 <button class="nav-btn" data-section="flashcards">Flashcards</button>
                 <button class="nav-btn" data-section="statistics">Statistik</button>
+                <button class="nav-btn" data-section="minna">Minna no Nihongo</button>
             </nav>
         </div>
     </header>
@@ -427,6 +428,235 @@
                             <div class="calendar-day">T</div>
                             <div class="calendar-day active">F</div>
                             <div class="calendar-day active">S</div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Minna no Nihongo Section -->
+            <section class="section" id="minna">
+                <h2 class="section-title">みんなの日本語 - Minna no Nihongo</h2>
+                <div class="minna-container">
+                    <!-- Chapter Navigation -->
+                    <div class="chapter-nav">
+                        <button class="btn btn-outline active" data-chapter="overview">概要 (Overview)</button>
+                        <button class="btn btn-outline" data-chapter="katakana">カタカナ (Katakana)</button>
+                        <button class="btn btn-outline" data-chapter="vocabulary">語彙 (Vocabulary)</button>
+                        <button class="btn btn-outline" data-chapter="grammar">文法 (Grammar)</button>
+                        <button class="btn btn-outline" data-chapter="culture">文化 (Culture)</button>
+                        <button class="btn btn-outline" data-chapter="quiz-minna">クイズ (Quiz)</button>
+                    </div>
+
+                    <!-- Overview Tab -->
+                    <div class="minna-tab active" id="overview">
+                        <div class="overview-content">
+                            <div class="course-intro">
+                                <h3>コース紹介 (Course Introduction)</h3>
+                                <p>みんなの日本語 第1巻 第1課〜第3課の総合学習モジュールです。</p>
+                                <p>This comprehensive module covers Minna no Nihongo Volume 1, Chapters 1-3, integrating both Hiragana and Katakana writing systems.</p>
+                            </div>
+                            
+                            <div class="learning-objectives">
+                                <h3>学習目標 (Learning Objectives)</h3>
+                                <div class="objectives-grid">
+                                    <div class="objective-card">
+                                        <h4>第1課 (Chapter 1)</h4>
+                                        <ul>
+                                            <li>Self-introduction</li>
+                                            <li>Basic greetings</li>
+                                            <li>Countries and occupations</li>
+                                            <li>Age expressions</li>
+                                        </ul>
+                                    </div>
+                                    <div class="objective-card">
+                                        <h4>第2課 (Chapter 2)</h4>
+                                        <ul>
+                                            <li>Demonstrative pronouns</li>
+                                            <li>School supplies</li>
+                                            <li>Electronic devices</li>
+                                            <li>Possessive expressions</li>
+                                        </ul>
+                                    </div>
+                                    <div class="objective-card">
+                                        <h4>第3課 (Chapter 3)</h4>
+                                        <ul>
+                                            <li>Location expressions</li>
+                                            <li>Buildings and facilities</li>
+                                            <li>Existence verbs</li>
+                                            <li>Price inquiries</li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="progress-overview">
+                                <h3>学習進度 (Learning Progress)</h3>
+                                <div class="progress-stats">
+                                    <div class="stat-item">
+                                        <span class="stat-number" id="minnaVocabProgress">0</span>
+                                        <span class="stat-label">Vocabulary Learned</span>
+                                    </div>
+                                    <div class="stat-item">
+                                        <span class="stat-number" id="minnaGrammarProgress">0</span>
+                                        <span class="stat-label">Grammar Points</span>
+                                    </div>
+                                    <div class="stat-item">
+                                        <span class="stat-number" id="minnaKatakanaProgress">0</span>
+                                        <span class="stat-label">Katakana Mastered</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Katakana Tab -->
+                    <div class="minna-tab" id="katakana">
+                        <div class="katakana-content">
+                            <div class="writing-system-intro">
+                                <h3>カタカナについて (About Katakana)</h3>
+                                <p>Katakana is used for foreign loanwords, onomatopoeia, and emphasis. It's essential for modern Japanese.</p>
+                                <div class="usage-examples">
+                                    <div class="usage-card">
+                                        <h4>Foreign Words</h4>
+                                        <p>コーヒー (koohii) - coffee</p>
+                                        <p>コンピューター (konpyuutaa) - computer</p>
+                                    </div>
+                                    <div class="usage-card">
+                                        <h4>Country Names</h4>
+                                        <p>アメリカ (Amerika) - America</p>
+                                        <p>イギリス (Igirisu) - England</p>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="katakana-practice">
+                                <h3>カタカナ練習 (Katakana Practice)</h3>
+                                <div class="practice-type-selector">
+                                    <button class="btn btn-outline active" data-katakana-type="basic">基本 (Basic)</button>
+                                    <button class="btn btn-outline" data-katakana-type="dakuten">濁点 (Dakuten)</button>
+                                    <button class="btn btn-outline" data-katakana-type="handakuten">半濁点 (Handakuten)</button>
+                                </div>
+                                <div class="katakana-grid" id="katakanaGrid">
+                                    <!-- Will be populated by JavaScript -->
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Vocabulary Tab -->
+                    <div class="minna-tab" id="vocabulary">
+                        <div class="vocabulary-content">
+                            <h3>語彙学習 (Vocabulary Learning)</h3>
+                            <div class="vocab-group-selector">
+                                <button class="btn btn-outline active" data-vocab-group="group1">Group 1: 基本挨拶</button>
+                                <button class="btn btn-outline" data-vocab-group="group2">Group 2: 国と職業</button>
+                                <button class="btn btn-outline" data-vocab-group="group3">Group 3: 年齢と質問</button>
+                                <button class="btn btn-outline" data-vocab-group="group4">Group 4: 指示語</button>
+                                <button class="btn btn-outline" data-vocab-group="group5">Group 5: 学用品</button>
+                                <button class="btn btn-outline" data-vocab-group="group6">Group 6: 電子機器</button>
+                                <button class="btn btn-outline" data-vocab-group="group7">Group 7: 場所の表現</button>
+                                <button class="btn btn-outline" data-vocab-group="group8">Group 8: 建物と施設</button>
+                                <button class="btn btn-outline" data-vocab-group="group9">Group 9: 階と方向</button>
+                                <button class="btn btn-outline" data-vocab-group="group10">Group 10: 存在と値段</button>
+                            </div>
+                            
+                            <div class="vocab-display" id="vocabDisplay">
+                                <!-- Will be populated by JavaScript -->
+                            </div>
+                            
+                            <div class="verb-groups">
+                                <h3>動詞グループ (Verb Groups)</h3>
+                                <div class="verb-group-selector">
+                                    <button class="btn btn-outline active" data-verb-group="copula">コピュラ動詞</button>
+                                    <button class="btn btn-outline" data-verb-group="existence">存在動詞</button>
+                                    <button class="btn btn-outline" data-verb-group="movement">移動動詞</button>
+                                </div>
+                                <div class="verb-display" id="verbDisplay">
+                                    <!-- Will be populated by JavaScript -->
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Grammar Tab -->
+                    <div class="minna-tab" id="grammar">
+                        <div class="grammar-content">
+                            <h3>文法ポイント (Grammar Points)</h3>
+                            <div class="grammar-chapter-selector">
+                                <button class="btn btn-outline active" data-grammar-chapter="chapter1">第1課</button>
+                                <button class="btn btn-outline" data-grammar-chapter="chapter2">第2課</button>
+                                <button class="btn btn-outline" data-grammar-chapter="chapter3">第3課</button>
+                            </div>
+                            
+                            <div class="grammar-display" id="grammarDisplay">
+                                <!-- Will be populated by JavaScript -->
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Culture Tab -->
+                    <div class="minna-tab" id="culture">
+                        <div class="culture-content">
+                            <h3>文化ノート (Cultural Notes)</h3>
+                            <div class="culture-topics">
+                                <div class="culture-card" data-culture="greetings">
+                                    <h4>日本の挨拶 (Japanese Greetings)</h4>
+                                    <p>Learn about proper greeting etiquette in Japan</p>
+                                </div>
+                                <div class="culture-card" data-culture="writingSystems">
+                                    <h4>文字体系 (Writing Systems)</h4>
+                                    <p>Understanding when to use Hiragana vs Katakana</p>
+                                </div>
+                                <div class="culture-card" data-culture="politeness">
+                                    <h4>敬語 (Politeness Levels)</h4>
+                                    <p>Navigate Japanese politeness and formality</p>
+                                </div>
+                            </div>
+                            
+                            <div class="culture-detail" id="cultureDetail">
+                                <!-- Will be populated by JavaScript -->
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Quiz Tab -->
+                    <div class="minna-tab" id="quiz-minna">
+                        <div class="minna-quiz-content">
+                            <h3>みんなの日本語クイズ (Minna no Nihongo Quiz)</h3>
+                            <div class="minna-quiz-type-selector">
+                                <button class="btn btn-outline active" data-minna-quiz="vocab-recognition">語彙認識</button>
+                                <button class="btn btn-outline" data-minna-quiz="vocab-translation">語彙翻訳</button>
+                                <button class="btn btn-outline" data-minna-quiz="grammar-pattern">文法パターン</button>
+                                <button class="btn btn-outline" data-minna-quiz="katakana-reading">カタカナ読み</button>
+                                <button class="btn btn-outline" data-minna-quiz="mixed-writing">混合書字</button>
+                            </div>
+                            
+                            <div class="minna-quiz-container">
+                                <div class="minna-quiz-question" id="minnaQuizQuestion">
+                                    <!-- Will be populated by JavaScript -->
+                                </div>
+                                <div class="minna-quiz-options" id="minnaQuizOptions">
+                                    <!-- Will be populated by JavaScript -->
+                                </div>
+                                <div class="minna-quiz-result" id="minnaQuizResult">
+                                    <!-- Will be populated by JavaScript -->
+                                </div>
+                            </div>
+                            
+                            <div class="minna-quiz-stats">
+                                <div class="stat">
+                                    <span class="stat-label">正解:</span>
+                                    <span class="stat-value" id="minnaCorrectCount">0</span>
+                                </div>
+                                <div class="stat">
+                                    <span class="stat-label">不正解:</span>
+                                    <span class="stat-value" id="minnaIncorrectCount">0</span>
+                                </div>
+                                <div class="stat">
+                                    <span class="stat-label">正答率:</span>
+                                    <span class="stat-value" id="minnaAccuracy">0%</span>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
